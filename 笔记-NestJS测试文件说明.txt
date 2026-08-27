@@ -1,0 +1,65 @@
+//////////NestJS 中 *.spec.ts 测试文件说明
+================================
+
+一、是什么？
+-----------
+*.spec.ts 是单元测试文件（spec = specification，规格/规范）。
+使用 Jest / Vitest 测试框架，运行 npm run test 时自动执行。
+nest g 命令生成 module/service/controller 时会自动创建对应的 .spec.ts 文件。
+
+二、为什么不写也能正常运行？
+---------------------------
+测试文件和运行时完全无关：
+- 开发/生产环境启动时，Node.js 只加载业务代码，不会加载 .spec.ts
+- .spec.ts 只在执行测试命令（npm run test）时才被测试框架读取
+- 删掉 .spec.ts 文件，接口照样能正常跑
+
+三、默认生成的测试内容示例（order.service.spec.ts）：
+---------------------------------------------------
+import { Test, TestingModule } from '@nestjs/testing';
+import { OrderService } from './order.service';
+
+describe('OrderService', () => {
+  let service: OrderService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [OrderService],
+    }).compile();
+    service = module.get<OrderService>(OrderService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
+
+默认只有一个测试：验证 Service 能否被正确创建。
+
+四、写测试有什么用？
+-------------------
+1. 回归保障：改代码后跑测试，知道有没有把旧功能搞坏
+2. 设计倒逼：写测试迫使代码更模块化、更易测试
+3. 文档作用：测试用例本身就是活的文档
+4. 重构信心：有测试覆盖，重构时胆子更大
+
+五、不想生成测试文件怎么办？
+---------------------------
+方法一：生成时加 --no-spec 参数
+  nest g module order --no-spec
+  nest g service order --no-spec
+  nest g controller order --no-spec
+
+方法二：nest-cli.json 全局关闭
+  {
+    "schematics": {
+      "@nestjs/schematics:module": { "spec": false },
+      "@nestjs/schematics:service": { "spec": false },
+      "@nestjs/schematics:controller": { "spec": false }
+    }
+  }
+
+六、建议
+--------
+- 小项目 / 学习阶段：可以先不开，专注跑通业务逻辑
+- 正式项目 / 长期维护：建议至少给核心业务逻辑（service 层）写单元测试

@@ -1,0 +1,39 @@
+NestJS 控制器路径是否需要加 / 说明
+===================================
+
+结论：加不加都行，NestJS 会自动处理
+------------------------------------
+NestJS 内部会规范化路径，以下写法效果完全一样：
+  @Controller('user')     等价于  @Controller('/user')
+  @Get('list')            等价于  @Get('/list')
+  @Post('create')         等价于  @Post('/create')
+
+路径拼接规则
+-------------
+NestJS 会把 @Controller() 路径 + @Get/@Post() 路径拼接起来，中间自动补 /
+
+| @Controller   | @Get          | 最终路径                |
+|---------------|---------------|-------------------------|
+| 'user'        | 'list'        | /user/list              |
+| '/user'       | '/list'       | /user/list              |
+| 'user'        | '' 或不写     | /user                   |
+| '' 或不写     | 'hello'       | /hello                  |
+| 'api/user'    | 'list'        | /api/user/list          |
+| 'user'        | ':id'         | /user/:id               |
+
+实际建议
+---------
+1. 推荐不加前缀 / —— NestJS 官方文档和社区主流风格，代码更简洁
+     @Controller('user')    ✅ 推荐
+     @Get('list')           ✅ 推荐
+
+2. 多级路径也不用加首尾的 /
+     @Controller('api/user')   ✅
+     @Get('profile/detail')    ✅  最终：/api/user/profile/detail
+
+3. 动态参数同样
+     @Get(':id')            ✅ 等价于 @Get('/:id')
+
+4. 空字符串 = 不写参数
+     @Get()                 ✅
+     @Get('')               效果一样，但没必要写

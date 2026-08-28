@@ -4,11 +4,13 @@ import { AppService } from './app.service.js';
 import { UserController } from './user/user.controller.js';
 import { UserService } from './user/user.service.js';
 import { OrderModule } from './order/order.module.js';
+import { PrismaModule } from './prisma/prisma.module.js';
+import { PostModule } from './post/post.module.js';
 
 
 @Module({
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
-  imports: [OrderModule],
+  imports: [OrderModule, PrismaModule, PostModule],
 })
 export class AppModule {}

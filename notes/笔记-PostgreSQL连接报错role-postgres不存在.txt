@@ -72,6 +72,40 @@ PostgreSQL 连接问题汇总（Homebrew 安装）
     psql -U postgres -h localhost
 
 
+问题三：Navicat 创建数据库报错 column d.datlastsysoid does not exist
+------------------------------------------------------------------
+【现象】
+  在 Navicat 中新建数据库时报错：
+  ERROR:  column d.datlastsysoid does not exist
+  LINE 1: ..., 'pg_database') AS comment, t.spcname, d.datacl, d.datlasts...
+
+【原因】
+  PostgreSQL 17+ 移除了系统表 pg_database 中的 datlastsysoid 列，
+  但旧版本的 Navicat 在查询数据库列表时仍在使用这个字段，
+  导致兼容性错误。PostgreSQL 18 同样存在此问题。
+
+【解决方案】
+  方案一：升级 Navicat 到最新版（推荐）
+    Navicat 16.3+ / 17+ 版本已修复对 PostgreSQL 17/18 的兼容问题。
+    检查更新：Navicat 菜单 -> Check for Updates
+
+  方案二：用 SQL 命令手动创建数据库（临时方案）
+    在 Navicat 的查询编辑器中直接执行 CREATE DATABASE 语句，
+    绕过图形界面的 bug：
+      CREATE DATABASE mydb OWNER mac;
+
+  方案三：降低 PostgreSQL 版本
+    如果必须使用旧版 Navicat，可以改用 PostgreSQL 16 或更早版本：
+      brew install postgresql@16
+      brew services stop postgresql@18
+      brew services start postgresql@16
+
+  方案四：使用其他兼容的客户端
+    - DBeaver（免费开源，更新积极）
+    - pgAdmin 4（官方工具，完全兼容）
+    - TablePlus
+
+
 【常用 PostgreSQL 命令备忘】
   \l                 列出所有数据库
   \du                列出所有角色/用户

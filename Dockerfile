@@ -59,7 +59,7 @@ COPY --from=builder /app/src/generated ./src/generated
 COPY --from=builder /app/prisma ./prisma
 
 # 从 builder 阶段复制 prisma.config.ts（Prisma 7 配置文件）
-COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/prisma7.config.ts ./
 
 # 暴露 NestJS 服务端口
 # EXPOSE 只是声明，实际端口映射在 docker-compose.yml 里配置

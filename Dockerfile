@@ -19,7 +19,7 @@ RUN npm install
 COPY prisma ./prisma
 
 # 复制 prisma.config.ts
-COPY prisma.config.ts ./
+COPY prisma7.config.ts ./
 
 # 复制其余所有源代码
 COPY . .

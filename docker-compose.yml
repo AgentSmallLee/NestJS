@@ -24,7 +24,7 @@ services:
     # 数据卷挂载：把数据库文件持久化到宿主机
     # 格式：宿主机路径或卷名:容器内路径
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     # 网络：加入 app-network 内部网络
     # PostgreSQL 不对外暴露端口，只在内网和 NestJS 通信（更安全）
     networks:

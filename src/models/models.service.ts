@@ -6,7 +6,7 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 
 @Injectable()
-export class ModlesService {
+export class ModelsService {
     
 
     async chatSystem(system: string, message: string) {

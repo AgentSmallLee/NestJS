@@ -6,12 +6,17 @@ import { UserService } from './user/user.service.js';
 import { OrderModule } from './order/order.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { PostModule } from './post/post.module.js';
-import { ModlesModule } from './models/models.module.js';
+import { PromptsModule } from './prompts/prompts.module.js';
+import { ChainsModule } from './chains/chains.module.js';
+import { AgentsModule } from './agents/agents.module.js';
+import { MemoryModule } from './memory/memory.module.js';
+import { ModelsModule } from './models/models.module.js';
+import { RagModule } from './rag/rag.module.js';
 
 
 @Module({
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
-  imports: [OrderModule, PrismaModule, PostModule, ModlesModule],
+  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule],
 })
 export class AppModule {}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>MCP Agent 工作流程图</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #1d1d1f;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #6e6e73;
+      margin-bottom: 32px;
+    }
+    .diagram-container {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      max-width: 1100px;
+      width: 100%;
+      overflow-x: auto;
+    }
+    .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>MCP Agent 工作流程图</h1>
+  <div class="subtitle">src/mcp-agent/mcp-agent.service.ts 完整执行流程</div>
+
+  <div class="diagram-container">
+    <pre class="mermaid">
+flowchart TD
+    subgraph 初始化阶段 ["🟢 初始化阶段（onModuleInit）"]
+        A([NestJS 模块启动]) --> B["new MultiServerMCPClient<br/>配置 mcpServers: local-tools"]
+        B --> C["启动 stdio 子进程<br/>npx tsx src/mcp-server/server.ts"]
+        C --> D["MCP 协议握手<br/>initialize / initialized"]
+        D --> E["工具发现: tools/list<br/>获取 database-query / read-file / weather-query"]
+        E --> F["MCP Tools 转换为 LangChain Tools<br/>（zod schema 转换 + 包装 invoke）"]
+        F --> G["缓存到 this.mcpTools"]
+    end
+
+    subgraph Agent执行阶段 ["🔵 Agent 执行阶段（runAgent）"]
+        H([用户调用 POST /mcp-agent/run<br/>传入 userMessage]) --> I["构建初始 messages<br/>SystemMessage + HumanMessage"]
+        I --> J{"roundCount < 6?"}
+        J -- 否 --> K["超出最大轮次<br/>返回最后一条 AI 消息"]
+        J -- 是 --> L["LLM 调用: llmWithTools.invoke(messages)<br/>（已绑定 mcpTools）"]
+        L --> M{"response.tool_calls<br/>有工具调用?"}
+        M -- 否 --> N["LLM 给出最终回答<br/>push AIMessage 到 messages"]
+        N --> O([返回 answer + steps])
+        M -- 是 --> P["遍历每一个 toolCall"]
+        P --> Q{"toolMap 中<br/>存在该工具?"}
+        Q -- 否 --> R["push ToolMessage<br/>(错误: 工具不存在)"]
+        R --> S["roundCount++"]
+        S --> J
+        Q -- 是 --> T["toolFn.invoke(toolCall.args)<br/>底层走 MCP 协议 tools/call"]
+        T --> U["MCP Server 执行工具<br/>返回 content 结果"]
+        U --> V["push ToolMessage 到 messages<br/>（带工具返回结果）"]
+        V --> S
+    end
+
+    subgraph 销毁阶段 ["🟠 销毁阶段（onModuleDestroy）"]
+        W([NestJS 模块销毁]) --> X["mcpClient.close()<br/>关闭所有 MCP 连接<br/>终止子进程"]
+    end
+
+    G -.-> H
+    G -.工具列表.-> L
+
+    style A fill:#d4edda,stroke:#28a745
+    style O fill:#d4edda,stroke:#28a745
+    style K fill:#f8d7da,stroke:#dc3545
+    style X fill:#fff3cd,stroke:#ffc107
+    </pre>
+  </div>
+
+  <br/>
+
+  <div class="diagram-container">
+    <h2 style="margin-top:0">工具调用时序图</h2>
+    <pre class="mermaid">
+sequenceDiagram
+    participant Client as HTTP 客户端
+    participant Controller as McpAgentController
+    participant Service as McpAgentService
+    participant LLM as ChatOllama (LLM)
+    participant MCP as MultiServerMCPClient
+    participant Server as MCP Server (子进程)
+
+    Note over Service,Server: onModuleInit 初始化阶段
+    Service->>MCP: new MultiServerMCPClient(config)
+    Service->>MCP: getTools()
+    MCP->>Server: 启动 stdio 子进程
+    MCP->>Server: initialize (能力协商)
+    Server-->>MCP: initialize result
+    MCP->>Server: tools/list (工具发现)
+    Server-->>MCP: [database-query, read-file, weather-query]
+    MCP-->>Service: DynamicStructuredTool[]
+    Note right of Service: 缓存到 this.mcpTools
+
+    Note over Client,Server: runAgent 执行阶段
+    Client->>Controller: POST /mcp-agent/run { message }
+    Controller->>Service: runAgent(userMessage)
+    Service->>Service: 构建 messages (System + Human)
+
+    loop 最多 6 轮
+        Service->>LLM: invoke(messages)
+        LLM-->>Service: AIMessage（可能含 tool_calls）
+
+        alt 无工具调用（最终回答）
+            Service-->>Client: { answer, steps }
+        else 有工具调用
+            Service->>MCP: tool.invoke(args)
+            MCP->>Server: tools/call (MCP 协议)
+            Server-->>MCP: tool result (content[])
+            MCP-->>Service: LangChain Tool 结果
+            Service->>Service: push ToolMessage 到 messages
+        end
+    end
+
+    Note over Service,Server: onModuleDestroy 销毁阶段
+    Service->>MCP: close()
+    MCP->>Server: 终止子进程
+    </pre>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      flowchart: {
+        curve: 'basis',
+        padding: 15,
+        nodeSpacing: 50,
+        rankSpacing: 60,
+      },
+      sequence: {
+        showSequenceNumbers: false,
+        wrap: true,
+        padding: 15,
+      }
+    });
+  </script>
+</body>
+</html>

@@ -14,11 +14,13 @@ import { ModelsModule } from './models/models.module.js';
 import { RagModule } from './rag/rag.module.js';
 import { FunctionCallingModule } from './function-calling/function-calling.module.js';
 import { RagdbModule } from './ragdb/ragdb.module.js';
+import { McpClientModule } from './mcp-client/mcp-client.module.js';
+import { McpAgentModule } from './mcp-agent/mcp-agent.module.js';
 
 
 @Module({
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
-  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule, FunctionCallingModule, RagdbModule],
+  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule, FunctionCallingModule, RagdbModule, McpClientModule, McpAgentModule],
 })
 export class AppModule {}

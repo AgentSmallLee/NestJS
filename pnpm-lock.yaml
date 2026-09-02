@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@langchain/classic':
+        specifier: ^1.0.45
+        version: 1.0.45(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(ws@8.21.3)(zod@4.5.4))(ws@8.21.3))(openai@7.8.0(undici@6.20.1)(ws@8.21.3)(zod@4.5.4))(undici@6.20.1)(ws@8.21.3)
       '@langchain/community':
         specifier: ^1.1.29
         version: 1.1.29(@browserbasehq/sdk@2.19.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.62.1)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.8.0(undici@6.20.1)(ws@8.21.3)(zod@4.5.4))(zod@4.5.4))(@ibm-cloud/watsonx-ai@1.7.16(supports-color@7.2.0))(@langchain/core@1.2.9(openai@7.8.0(undici@6.20.1)(ws@8.21.3)(zod@4.5.4))(ws@8.21.3))(ibm-cloud-sdk-core@5.6.0(supports-color@7.2.0))(jsonwebtoken@9.0.3)(lodash@4.18.1)(openai@7.8.0(undici@6.20.1)(ws@8.21.3)(zod@4.5.4))(pg@8.23.0)(playwright@1.62.1)(undici@6.20.1)(ws@8.21.3)

@@ -12,11 +12,13 @@ import { AgentsModule } from './agents/agents.module.js';
 import { MemoryModule } from './memory/memory.module.js';
 import { ModelsModule } from './models/models.module.js';
 import { RagModule } from './rag/rag.module.js';
+import { FunctionCallingModule } from './function-calling/function-calling.module.js';
+import { RagdbModule } from './ragdb/ragdb.module.js';
 
 
 @Module({
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
-  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule],
+  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule, FunctionCallingModule, RagdbModule],
 })
 export class AppModule {}

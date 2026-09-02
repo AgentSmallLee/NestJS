@@ -1,0 +1,102 @@
+AIMessage {
+  "content": "",
+  "additional_kwargs": {
+    "reasoning_content": "用户想要购买2台MacBook Pro。我需要先查询库存信息，然后创建订单。\n\n首先调用check_inventory工具来查询MacBook Pro的库存和价格。产品名称应该是\"MacBook Pro\"。\n\n然后调用create_order工具来创建订单，需要：\n- productName: \"MacBook Pro\"\n- quantity: 2\n- customerName: \"大伟\"\n\n让我先查询库存信息。"
+  },
+  "response_metadata": {
+    "model_provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "created_at": "2026-09-02T06:15:37.779563Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 3073816208,
+    "load_duration": 1839989583,
+    "prompt_eval_count": 457,
+    "prompt_eval_duration": 156640000,
+    "eval_count": 118,
+    "eval_duration": 1073689000
+  },
+  "tool_calls": [
+    {
+      "name": "check_inventory",
+      "args": {
+        "productName": "MacBook Pro"
+      },
+      "id": "02cebd14-20e8-4d1d-a3cc-a9f8de011f0f",
+      "type": "tool_call"
+    }
+  ],
+  "invalid_tool_calls": [],
+  "usage_metadata": {
+    "input_tokens": 457,
+    "output_tokens": 118,
+    "total_tokens": 575,
+    "input_token_details": {},
+    "output_token_details": {}
+  }
+}
+AIMessage {
+  "content": "",
+  "additional_kwargs": {
+    "reasoning_content": "好的，库存查询成功，显示有10台MacBook Pro。现在需要为客户创建订单。根据要求，我需要提供产品名称、数量和客户姓名。我已经知道产品名称是\"MacBook Pro\"，数量是2，但客户姓名是大伟。我将使用这些信息来创建订单。"
+  },
+  "response_metadata": {
+    "model_provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "created_at": "2026-09-02T06:15:38.909762Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1117103500,
+    "load_duration": 1013792,
+    "prompt_eval_count": 532,
+    "prompt_eval_duration": 52018000,
+    "eval_count": 116,
+    "eval_duration": 1060498000
+  },
+  "tool_calls": [
+    {
+      "name": "create_order",
+      "args": {
+        "productName": "MacBook Pro",
+        "quantity": 2,
+        "customerName": "大伟"
+      },
+      "id": "86f34927-b144-4e7f-a2cc-1c807f79bfe3",
+      "type": "tool_call"
+    }
+  ],
+  "invalid_tool_calls": [],
+  "usage_metadata": {
+    "input_tokens": 532,
+    "output_tokens": 116,
+    "total_tokens": 648,
+    "input_token_details": {},
+    "output_token_details": {}
+  }
+}
+AIMessage {
+  "content": "好的，订单已成功创建！\n\n**订单信息：**\n*   **订单号 (ORD):** ORD-1788329738913\n*   **商品:** MacBook Pro\n*   **数量:** 2台\n*   **客户:** 大伟\n*   **创建时间:** 2026/9/2 14:15:38\n\n请您查收您的订单，并尽快付款。",
+  "additional_kwargs": {},
+  "response_metadata": {
+    "model_provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "created_at": "2026-09-02T06:15:39.891722Z",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 975464583,
+    "load_duration": 915292,
+    "prompt_eval_count": 662,
+    "prompt_eval_duration": 68214000,
+    "eval_count": 99,
+    "eval_duration": 902939000
+  },
+  "tool_calls": [],
+  "invalid_tool_calls": [],
+  "usage_metadata": {
+    "input_tokens": 662,
+    "output_tokens": 99,
+    "total_tokens": 761,
+    "input_token_details": {},
+    "output_token_details": {}
+  }
+}

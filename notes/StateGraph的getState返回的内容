@@ -1,0 +1,96 @@
+{
+  values: {
+    messages: [
+      HumanMessage {
+        "id": "7a8bf288-2524-467f-ac85-4b447fba783b",
+        "content": "我是大伟，最近在学习LangGraph",
+        "additional_kwargs": {},
+        "response_metadata": {}
+      },
+      AIMessage {
+        "id": "chatcmpl-318",
+        "content": "你好！很高兴看到你是大伟同学，最近在学习 LangGraph 的过程中遇到了什么具体问题吗？或者想了解一下 LangGraph 的基础知识？\n\n作为一个人工智能助手，我可以帮助你：\n- **解答技术难题**：比如如何将多个任务串联、如何处理节点之间的依赖关系等\n- **提供学习资源**：推荐一些适合初学者理解的课程或书籍\n- **优化代码实践**：给出实用的代码示例来帮助你更好地理解和使用 LangGraph 的功能\n\n如果你有任何具体的问题，欢迎随时告诉我！😊",
+        "additional_kwargs": {},
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 33,
+            "completionTokens": 182,
+            "totalTokens": 215
+          },
+          "finish_reason": "stop",
+          "model_provider": "openai",
+          "model_name": "qwen3.5:0.8b",
+          "usage": {
+            "prompt_tokens": 33,
+            "completion_tokens": 182,
+            "total_tokens": 215
+          },
+          "system_fingerprint": "fp_ollama"
+        },
+        "tool_calls": [],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "output_tokens": 182,
+          "input_tokens": 33,
+          "total_tokens": 215,
+          "input_token_details": {},
+          "output_token_details": {}
+        }
+      },
+      HumanMessage {
+        "id": "d5a8dee9-caf2-4f76-9b03-ac5ebc1fa25a",
+        "content": "我是谁",
+        "additional_kwargs": {},
+        "response_metadata": {}
+      },
+      AIMessage {
+        "id": "chatcmpl-476",
+        "content": "",
+        "additional_kwargs": {},
+        "response_metadata": {
+          "tokenUsage": {
+            "promptTokens": 151,
+            "completionTokens": 3945,
+            "totalTokens": 4096
+          },
+          "finish_reason": "length",
+          "model_provider": "openai",
+          "model_name": "qwen3.5:0.8b",
+          "usage": {
+            "prompt_tokens": 151,
+            "completion_tokens": 3945,
+            "total_tokens": 4096
+          },
+          "system_fingerprint": "fp_ollama"
+        },
+        "tool_calls": [],
+        "invalid_tool_calls": [],
+        "usage_metadata": {
+          "output_tokens": 3945,
+          "input_tokens": 151,
+          "total_tokens": 4096,
+          "input_token_details": {},
+          "output_token_details": {}
+        }
+      }
+    ]
+  },
+  next: [],
+  tasks: [],
+  metadata: { source: 'loop', step: 4, parents: {}, thread_id: '001' },
+  config: {
+    configurable: {
+      thread_id: '001',
+      checkpoint_id: '1f1a75c1-519a-6cb0-8004-3fa004ad9fde',
+      checkpoint_ns: ''
+    }
+  },
+  createdAt: '2026-09-03T05:55:35.803Z',
+  parentConfig: {
+    configurable: {
+      thread_id: '001',
+      checkpoint_ns: '',
+      checkpoint_id: '1f1a75bf-e3f2-6650-8003-5d5291e7ea19'
+    }
+  }
+}

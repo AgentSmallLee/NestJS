@@ -16,11 +16,12 @@ import { FunctionCallingModule } from './function-calling/function-calling.modul
 import { RagdbModule } from './ragdb/ragdb.module.js';
 import { McpClientModule } from './mcp-client/mcp-client.module.js';
 import { McpAgentModule } from './mcp-agent/mcp-agent.module.js';
+import { LanggraphModule } from './langgraph/langgraph.module.js';
 
 
 @Module({
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
-  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule, FunctionCallingModule, RagdbModule, McpClientModule, McpAgentModule],
+  imports: [OrderModule, PrismaModule, PostModule, ModelsModule, PromptsModule, ChainsModule, AgentsModule, MemoryModule, RagModule, FunctionCallingModule, RagdbModule, McpClientModule, McpAgentModule, LanggraphModule],
 })
 export class AppModule {}

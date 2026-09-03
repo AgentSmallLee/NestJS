@@ -1,11 +1,14 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LanggraphService } from './langgraph.service.js';
+import { ArticleService } from './article.service.js';
 
 @Controller('langgraph')
 export class LanggraphController {
 
 
-    constructor(private readonly langgraphService: LanggraphService) { }
+    constructor(
+        private readonly langgraphService: LanggraphService,
+        private readonly articleService: ArticleService) { }
 
 
     @Post('simple-chat')
@@ -21,5 +24,10 @@ export class LanggraphController {
     @Get('history/:threadId')
     history(@Param('threadId') threadId: string) {
         return this.langgraphService.history(threadId);
+    }
+
+    @Post('article')
+    processArticle(@Body() body: { article: string }) {
+      return this.articleService.process(body.article)
     }
 }

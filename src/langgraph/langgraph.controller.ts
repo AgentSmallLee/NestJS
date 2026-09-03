@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LanggraphService } from './langgraph.service.js';
 import { ArticleService } from './article.service.js';
+import { ReactAgentService } from './react-agent.service.js';
+import { RoutingService } from './routing.service.js';
+import { ParallelService } from './paralle.service.js';
+
+
 
 @Controller('langgraph')
 export class LanggraphController {
@@ -8,7 +13,10 @@ export class LanggraphController {
 
     constructor(
         private readonly langgraphService: LanggraphService,
-        private readonly articleService: ArticleService) { }
+        private readonly articleService: ArticleService,
+        private readonly reactSvc: ReactAgentService,
+        private readonly routingSvc: RoutingService,
+        private readonly parallelSvc: ParallelService) { }
 
 
     @Post('simple-chat')
@@ -28,6 +36,25 @@ export class LanggraphController {
 
     @Post('article')
     processArticle(@Body() body: { article: string }) {
-      return this.articleService.process(body.article)
+        return this.articleService.process(body.article)
+    }
+
+    // ── 第二章接口 ──────────────────────────────────────
+    @Post('react-chat')
+    reactChat(@Body() body: { threadId: string; message: string }) {
+        return this.reactSvc.chat(body.threadId, body.message)
+    }
+
+
+    // 条件路由
+    @Post('route')
+    route(@Body() body: { input: string }) {
+      return this.routingSvc.handle(body.input)
+    }
+
+    // 并行
+    @Post('parallel')
+    parallel(@Body() body: { task: string }) {
+      return this.parallelSvc.parallelChat(body.task)
     }
 }

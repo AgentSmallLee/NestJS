@@ -9,6 +9,7 @@ import {
     MemorySaver,
 } from '@langchain/langgraph'
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { ChatOllama } from '@langchain/ollama';
 
 @Injectable()
 export class LanggraphService implements OnModuleInit {
@@ -31,13 +32,13 @@ export class LanggraphService implements OnModuleInit {
     private memoryGraph: any
 
     async onModuleInit() {
-        const llm = new ChatOpenAI({
-            model: config.langGraph.model,
-            apiKey: config.langGraph.apiKey,
-            configuration: { baseURL: config.langGraph.baseURL },
-            temperature: config.langGraph.temperature
-        })
 
+        const llm = new ChatOllama({
+            model: config.ollama.chatModel,
+            temperature: config.ollama.temperature,
+            baseUrl: config.ollama.baseUrl,
+            think: false
+        })
         type NewType = typeof MessagesAnnotation.State;
 
         // ── 工作流一：无记忆，每次 invoke 独立 ─────────────

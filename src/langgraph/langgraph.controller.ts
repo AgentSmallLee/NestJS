@@ -7,6 +7,7 @@ import { ParallelService } from './paralle.service.js';
 import { SupervisorService } from './supervisor.service.js';
 import { PipelineService } from './pipeline.service.js';
 import { CodeReviewService } from './code-review.service.js';
+import { EmailService } from './email.service.js';
 
 
 
@@ -22,7 +23,8 @@ export class LanggraphController {
         private readonly parallelSvc: ParallelService,
         private readonly supervisorSvc: SupervisorService,
         private readonly pipelineSvc: PipelineService,
-        private readonly codeReviewSvc: CodeReviewService
+        private readonly codeReviewSvc: CodeReviewService,
+        private readonly emailSvc: EmailService
     ) { }
 
 
@@ -56,28 +58,56 @@ export class LanggraphController {
     // 条件路由
     @Post('route')
     route(@Body() body: { input: string }) {
-      return this.routingSvc.handle(body.input)
+        return this.routingSvc.handle(body.input)
     }
 
     // 并行
     @Post('parallel')
     parallel(@Body() body: { task: string }) {
-      return this.parallelSvc.parallelChat(body.task)
+        return this.parallelSvc.parallelChat(body.task)
     }
 
     // 任务分配
     @Post('supervisor')
     supervisor(@Body() body: { input: string }) {
-      return this.supervisorSvc.run(body.input)
+        return this.supervisorSvc.run(body.input)
     }
 
     @Post('pipeline')
     pipeline(@Body() body: { topic: string }) {
-      return this.pipelineSvc.createContent(body.topic)
+        return this.pipelineSvc.createContent(body.topic)
     }
 
     @Post('code-review')
     codeReview(@Body() body: { code: string; language?: string }) {
-      return this.codeReviewSvc.review(body.code, body.language)
+        return this.codeReviewSvc.review(body.code, body.language)
+    }
+
+    @Post('email/start')
+    emailStart(@Body() body: { request: string; threadId: string }) {
+        return this.emailSvc.start(body.request, body.threadId)
+    }
+
+    @Post('email/:threadId/approve')
+    emailApprove(@Param('threadId') threadId: string) {
+        return this.emailSvc.approve(threadId)
+    }
+
+    @Post('email/:threadId/reject')
+    emailReject(@Param('threadId') threadId: string) {
+        return this.emailSvc.reject(threadId)
+    }
+
+    @Post('email/:threadId/modify')
+    emailModify(
+        @Param('threadId') threadId: string,
+        @Body() body: { feedback: string },
+    ) {
+        return this.emailSvc.requestModify(threadId, body.feedback)
+    }
+
+    @Get('email/:threadId/state')
+    emailState(@Param('threadId') threadId: string) {
+        return this.emailSvc.getState(threadId)
     }
 }

@@ -5,6 +5,8 @@ import { ReactAgentService } from './react-agent.service.js';
 import { RoutingService } from './routing.service.js';
 import { ParallelService } from './paralle.service.js';
 import { SupervisorService } from './supervisor.service.js';
+import { PipelineService } from './pipeline.service.js';
+import { CodeReviewService } from './code-review.service.js';
 
 
 
@@ -18,7 +20,9 @@ export class LanggraphController {
         private readonly reactSvc: ReactAgentService,
         private readonly routingSvc: RoutingService,
         private readonly parallelSvc: ParallelService,
-        private readonly supervisorSvc: SupervisorService
+        private readonly supervisorSvc: SupervisorService,
+        private readonly pipelineSvc: PipelineService,
+        private readonly codeReviewSvc: CodeReviewService
     ) { }
 
 
@@ -65,5 +69,15 @@ export class LanggraphController {
     @Post('supervisor')
     supervisor(@Body() body: { input: string }) {
       return this.supervisorSvc.run(body.input)
+    }
+
+    @Post('pipeline')
+    pipeline(@Body() body: { topic: string }) {
+      return this.pipelineSvc.createContent(body.topic)
+    }
+
+    @Post('code-review')
+    codeReview(@Body() body: { code: string; language?: string }) {
+      return this.codeReviewSvc.review(body.code, body.language)
     }
 }

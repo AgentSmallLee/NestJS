@@ -4,6 +4,7 @@ import { ArticleService } from './article.service.js';
 import { ReactAgentService } from './react-agent.service.js';
 import { RoutingService } from './routing.service.js';
 import { ParallelService } from './paralle.service.js';
+import { SupervisorService } from './supervisor.service.js';
 
 
 
@@ -16,7 +17,9 @@ export class LanggraphController {
         private readonly articleService: ArticleService,
         private readonly reactSvc: ReactAgentService,
         private readonly routingSvc: RoutingService,
-        private readonly parallelSvc: ParallelService) { }
+        private readonly parallelSvc: ParallelService,
+        private readonly supervisorSvc: SupervisorService
+    ) { }
 
 
     @Post('simple-chat')
@@ -56,5 +59,11 @@ export class LanggraphController {
     @Post('parallel')
     parallel(@Body() body: { task: string }) {
       return this.parallelSvc.parallelChat(body.task)
+    }
+
+    // 任务分配
+    @Post('supervisor')
+    supervisor(@Body() body: { input: string }) {
+      return this.supervisorSvc.run(body.input)
     }
 }
